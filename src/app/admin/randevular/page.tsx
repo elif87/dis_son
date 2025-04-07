@@ -63,15 +63,17 @@ export default function AdminRandevularPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const updateAppointmentStatus = async (id: string, status: string) => {
+  const updateAppointmentStatus = async (id: string, newStatus: AppointmentStatus) => {
     try {
       setError(null);
       const response = await fetch(`/api/appointments/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
         },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ status: newStatus }),
       });
 
       if (!response.ok) {
@@ -85,6 +87,7 @@ export default function AdminRandevularPage() {
       // Başarı mesajı göster
       alert('Randevu başarıyla güncellendi');
     } catch (err) {
+      console.error('Güncelleme hatası:', err);
       setError(err instanceof Error ? err.message : 'Bir hata oluştu');
       alert('Randevu güncellenirken bir hata oluştu');
     }
@@ -240,42 +243,21 @@ export default function AdminRandevularPage() {
                           <div className="text-sm text-gray-500">{appointment.customer.email}</div>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {getStatusBadge(appointment.status as AppointmentStatus)}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <div className="flex items-center space-x-2">
+                          <select
+                            value={appointment.status}
+                            onChange={(e) => updateAppointmentStatus(appointment.id, e.target.value as AppointmentStatus)}
+                            className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                          >
+                            <option value={AppointmentStatus.PENDING}>Bekliyor</option>
+                            <option value={AppointmentStatus.CONFIRMED}>Onaylandı</option>
+                            <option value={AppointmentStatus.CANCELLED}>İptal Edildi</option>
+                            <option value={AppointmentStatus.COMPLETED}>Tamamlandı</option>
+                          </select>
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                        {appointment.status === AppointmentStatus.PENDING && (
-                          <>
-                            <button
-                              onClick={() => updateAppointmentStatus(appointment.id, 'CONFIRMED')}
-                              className="text-green-600 hover:text-green-900 bg-green-50 px-3 py-1 rounded-md"
-                            >
-                              Onayla
-                            </button>
-                            <button
-                              onClick={() => updateAppointmentStatus(appointment.id, 'CANCELLED')}
-                              className="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-md"
-                            >
-                              İptal Et
-                            </button>
-                          </>
-                        )}
-                        {appointment.status === AppointmentStatus.CONFIRMED && (
-                          <>
-                            <button
-                              onClick={() => updateAppointmentStatus(appointment.id, 'COMPLETED')}
-                              className="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md"
-                            >
-                              Tamamlandı
-                            </button>
-                            <button
-                              onClick={() => updateAppointmentStatus(appointment.id, 'CANCELLED')}
-                              className="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-md"
-                            >
-                              İptal Et
-                            </button>
-                          </>
-                        )}
                         <button
                           onClick={() => deleteAppointment(appointment.id)}
                           className="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-md"
