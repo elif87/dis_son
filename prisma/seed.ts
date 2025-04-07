@@ -5,9 +5,10 @@ const prisma = new PrismaClient()
 async function main() {
   // Doktorlar ekle
   const doctor1 = await prisma.doctor.upsert({
-    where: { name: 'Dr. Ahmet Yılmaz' },
+    where: { id: 'doctor1' },
     update: {},
     create: {
+      id: 'doctor1',
       name: 'Dr. Ahmet Yılmaz',
       title: 'Diş Hekimi',
       specialties: ['Diş Çekimi', 'Dolgu', 'Kanal Tedavisi']
@@ -15,9 +16,10 @@ async function main() {
   })
 
   const doctor2 = await prisma.doctor.upsert({
-    where: { name: 'Dr. Ayşe Demir' },
+    where: { id: 'doctor2' },
     update: {},
     create: {
+      id: 'doctor2',
       name: 'Dr. Ayşe Demir',
       title: 'Ortodontist',
       specialties: ['Ortodonti', 'Diş Teli', 'Çene Düzeltme']
@@ -26,9 +28,10 @@ async function main() {
 
   // Müşteriler ekle
   const customer1 = await prisma.customer.upsert({
-    where: { phone: '05551234567' },
+    where: { id: 'customer1' },
     update: {},
     create: {
+      id: 'customer1',
       name: 'Mehmet Kaya',
       phone: '05551234567',
       email: 'mehmet@example.com'
@@ -36,9 +39,10 @@ async function main() {
   })
 
   const customer2 = await prisma.customer.upsert({
-    where: { phone: '05559876543' },
+    where: { id: 'customer2' },
     update: {},
     create: {
+      id: 'customer2',
       name: 'Zeynep Şahin',
       phone: '05559876543',
       email: 'zeynep@example.com'
