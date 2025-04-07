@@ -1,0 +1,16 @@
+{
+  "name": "DentTitanyum",
+  "short_name": "DentTitanyum",
+  "description": "DentTitanyum Diş Kliniği",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/images/dentlogo.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    }
+  ]
+} 

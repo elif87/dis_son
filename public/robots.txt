@@ -1,0 +1,14 @@
+# DentTitanyum robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://denttitanyum.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 10
+
+# Disallow paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /*?* 
