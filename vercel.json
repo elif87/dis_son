@@ -1,6 +1,16 @@
 {
   "env": {
     "DATABASE_URL": "postgres://neondb_owner:npg_fBlyuavt24px@ep-hidden-water-a2kvazn2-pooler.eu-central-1.aws.neon.tech/neondb?pgbouncer=true&connect_timeout=10&pool_timeout=10",
-    "DATABASE_URL_UNPOOLED": "postgres://neondb_owner:npg_fBlyuavt24px@ep-hidden-water-a2kvazn2.eu-central-1.aws.neon.tech/neondb?connect_timeout=10"
+    "DATABASE_URL_UNPOOLED": "postgres://neondb_owner:npg_fBlyuavt24px@ep-hidden-water-a2kvazn2.eu-central-1.aws.neon.tech/neondb?connect_timeout=10",
+    "SMTP_HOST": "smtp.gmail.com",
+    "SMTP_PORT": "465",
+    "SMTP_SECURE": "true",
+    "SMTP_USER": "elifnurzevahir@gmail.com",
+    "SMTP_PASSWORD": "peqr amyu wamz nyqo",
+    "SMTP_FROM_NAME": "DentTitanyum",
+    "SMTP_FROM_EMAIL": "elifnurzevahir@gmail.com",
+    "NEXTAUTH_SECRET": "your-secret-key-here",
+    "NEXTAUTH_URL": "https://dis-son.vercel.app",
+    "NEXT_PUBLIC_GA_ID": "G-FC0MW2SF0J"
   }
 } 

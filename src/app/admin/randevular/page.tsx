@@ -73,9 +73,14 @@ export default function AdminRandevularPage() {
         throw new Error(errorData.error || 'Randevu güncellenemedi');
       }
 
+      // Randevuları yeniden yükle
       await fetchAppointments();
+      
+      // Başarı mesajı göster
+      alert('Randevu başarıyla güncellendi');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Bir hata oluştu');
+      alert('Randevu güncellenirken bir hata oluştu');
     }
   };
 
