@@ -196,7 +196,13 @@ export async function POST(request: Request) {
         // E-posta hatası randevu oluşturmayı engellemeyecek
       }
 
-      return NextResponse.json(appointment)
+      return new NextResponse(JSON.stringify(appointment), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
+        }
+      });
     } catch (dbError: any) {
       console.error('Veritabanı işlem hatası:', dbError)
       return NextResponse.json(
@@ -215,61 +221,27 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const phone = searchParams.get("phone");
-    const email = searchParams.get("email");
-
-    if (!phone && !email) {
-      return NextResponse.json(
-        { message: "Telefon numarası veya e-posta adresi gerekli" },
-        { status: 400 }
-      );
-    }
-
-    let whereClause = {};
-    if (phone) {
-      // Telefon numarasını normalize et (başındaki 0'ı kaldır)
-      const normalizedPhone = phone.startsWith('0') ? phone.substring(1) : phone;
-      whereClause = {
-        customer: {
-          OR: [
-            { phone: phone }, // Orijinal numara
-            { phone: normalizedPhone }, // 0'sız versiyon
-            { phone: `0${normalizedPhone}` }, // 0'lı versiyon
-          ],
-        },
-      };
-    } else if (email) {
-      whereClause = {
-        customer: {
-          email: email,
-        },
-      };
-    }
-
     const appointments = await prisma.appointment.findMany({
-      where: whereClause,
       include: {
         customer: true,
-        doctor: true,
+        doctor: true
       },
       orderBy: {
-        date: "desc",
-      },
+        date: 'desc'
+      }
     });
 
-    if (appointments.length === 0) {
-      return NextResponse.json(
-        { message: "Randevu bulunamadı" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(appointments);
+    return new NextResponse(JSON.stringify(appointments), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache'
+      }
+    });
   } catch (error) {
-    console.error("Randevu sorgulama hatası:", error);
+    console.error('Randevular getirilirken hata:', error);
     return NextResponse.json(
-      { message: "Randevu sorgulanırken bir hata oluştu" },
+      { error: 'Randevular getirilirken bir hata oluştu' },
       { status: 500 }
     );
   }

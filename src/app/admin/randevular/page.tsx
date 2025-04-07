@@ -53,8 +53,14 @@ export default function AdminRandevularPage() {
     }
   };
 
+  // İlk yükleme ve periyodik yenileme
   useEffect(() => {
     fetchAppointments();
+
+    // Her 30 saniyede bir yenile
+    const interval = setInterval(fetchAppointments, 30000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const updateAppointmentStatus = async (id: string, status: string) => {
