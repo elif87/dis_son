@@ -1,0 +1,6 @@
+{
+  "env": {
+    "DATABASE_URL": "postgres://neondb_owner:npg_fBlyuavt24px@ep-hidden-water-a2kvazn2-pooler.eu-central-1.aws.neon.tech/neondb?pgbouncer=true&connect_timeout=10&pool_timeout=10",
+    "DATABASE_URL_UNPOOLED": "postgres://neondb_owner:npg_fBlyuavt24px@ep-hidden-water-a2kvazn2.eu-central-1.aws.neon.tech/neondb?connect_timeout=10"
+  }
+} 
