@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AdminNavbar from "@/app/components/AdminNavbar";
+import Cookies from "js-cookie";
 
 interface Doctor {
   id: string;
@@ -23,6 +24,11 @@ export default function DoctorManagement() {
     title: "",
     specialties: ""
   });
+
+  const handleLogout = () => {
+    Cookies.remove("adminToken");
+    router.push("/admin/login");
+  };
 
   useEffect(() => {
     fetchDoctors();
@@ -111,21 +117,21 @@ export default function DoctorManagement() {
 
   if (isLoading) return (
     <div className="min-h-screen bg-gray-50">
-      <AdminNavbar />
+      <AdminNavbar onLogout={handleLogout} />
       <div className="p-4">Yükleniyor...</div>
     </div>
   );
   
   if (error) return (
     <div className="min-h-screen bg-gray-50">
-      <AdminNavbar />
+      <AdminNavbar onLogout={handleLogout} />
       <div className="p-4 text-red-500">{error}</div>
     </div>
   );
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <AdminNavbar />
+      <AdminNavbar onLogout={handleLogout} />
       <div className="p-4 md:p-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
