@@ -6,14 +6,21 @@ export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/admin')) {
     // Login sayfasına erişimi kontrol etme
     if (request.nextUrl.pathname === '/admin/login') {
+      // Eğer zaten giriş yapmışsa admin paneline yönlendir
+      const isLoggedIn = request.cookies.get('adminToken');
+      if (isLoggedIn) {
+        return NextResponse.redirect(new URL('/admin', request.url));
+      }
       return NextResponse.next();
     }
 
     // Admin oturum kontrolü
     const isLoggedIn = request.cookies.get('adminToken');
     if (!isLoggedIn) {
-      // Login sayfasına yönlendir
-      return NextResponse.redirect(new URL('/admin/login', request.url));
+      // Login sayfasına yönlendir ve mevcut URL'i kaydet
+      const url = new URL('/admin/login', request.url);
+      url.searchParams.set('callbackUrl', request.nextUrl.pathname);
+      return NextResponse.redirect(url);
     }
   }
 

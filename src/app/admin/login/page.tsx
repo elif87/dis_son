@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 
 export default function LoginPage() {
@@ -9,15 +9,37 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    // Eğer zaten giriş yapmışsa admin paneline yönlendir
+    const adminToken = Cookies.get('adminToken');
+    if (adminToken) {
+      router.push('/admin');
+      router.refresh();
+    }
+  }, [router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basit bir doğrulama - gerçek uygulamada bu bilgiler güvenli bir şekilde saklanmalıdır
     if (username === 'admin' && password === 'admin123') {
       // Giriş başarılı - 24 saatlik cookie oluştur
       Cookies.set('adminToken', 'true', { expires: 1 });
-      router.push('/admin');
+      
+      // Kısa bir gecikme ekle
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Callback URL varsa oraya, yoksa admin paneline yönlendir
+      const callbackUrl = searchParams?.get('callbackUrl');
+      router.refresh();
+      if (callbackUrl) {
+        router.push(callbackUrl);
+      } else {
+        router.push('/admin');
+      }
+      router.refresh();
     } else {
       setError('Kullanıcı adı veya şifre hatalı!');
     }
